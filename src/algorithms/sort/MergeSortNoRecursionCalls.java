@@ -70,8 +70,8 @@ public class MergeSortNoRecursionCalls {
 
             System.arraycopy(temp, 0, arr, 0, left_l);
 
-            System.out.printf("Size=%d, ", size);
-            Utils.printArray("Being sorted array: \n", arr);
+//            System.out.printf("Size=%d, ", size);
+//            Utils.printArray("Being sorted array: \n", arr);
 
             size = size * 2;
 
@@ -86,6 +86,45 @@ public class MergeSortNoRecursionCalls {
         Utils.printArray("\nSorted array", arr);
 
         System.out.printf("Checks count: %d\nPermutations count: %d\n", counter_check, counter_permutation);
+
+
+        System.out.printf("Sort(len) :      merge(sort(1/2) + sort 1/2)\n");
+        int len_time = 0;
+        int len_time_half1 = 0;
+        int len_time_half2 = 0;
+        int iterations = 0;
+
+        for (int i = 0; i < 10; i++) {
+            int[] arr1 = Utils.create_random_data(500000);
+            int[] arr2 = Utils.create_random_data(500000);
+            int[] arr3 = new int[arr1.length + arr2.length];
+            System.arraycopy(arr1, 0, arr3, 0, arr1.length);
+            System.arraycopy(arr2, 0, arr3, arr1.length, arr2.length);
+//        Utils.printArray("\narr1: ", arr1);
+//        Utils.printArray("\narr2: ", arr2);
+//        Utils.printArray("\narr3: ", arr3);
+            long time1_start = System.currentTimeMillis();
+            new MergeSortNoRecursionCalls().mergeSort(arr1);
+            long time1_finish = System.currentTimeMillis();
+
+            long time2_start = System.currentTimeMillis();
+            new MergeSortNoRecursionCalls().mergeSort(arr2);
+            long time2_finish = System.currentTimeMillis();
+
+            long time3_start = System.currentTimeMillis();
+            new MergeSortNoRecursionCalls().mergeSort(arr3);
+            long time3_finish = System.currentTimeMillis();
+
+            System.out.printf("%5d\t\t\t%5d\t\t+\t\t%5d\t\t(%d)\n",
+                    time3_finish - time3_start,
+                    time1_finish - time1_start,
+                    time2_finish - time2_start,
+                    time1_finish - time1_start + time2_finish - time2_start
+            );
+            iterations = i;
+        }
+
+
     }
 
 
