@@ -9,6 +9,15 @@ public class PriorityQueue_ {
         this.data = new int[size];
     }
 
+    private void resize() {
+        int newLength = this.data.length << 1 | 1;
+        int[] new_data = new int[newLength];
+        for (int i = 0; i < this.data.length; i++) {
+            new_data[i] = this.data[i];
+        }
+        this.data = new_data;
+    }
+
     private int poll() {
         return data[0];
     }
@@ -21,6 +30,9 @@ public class PriorityQueue_ {
     }
 
     private void add(int newVal) {
+        if (count >= this.data.length) {
+            resize();
+        }
         int pos = find_pos(newVal);
         shift(pos);
         insert(pos, newVal);
@@ -71,18 +83,35 @@ public class PriorityQueue_ {
 
     }
 
+    boolean contains(int val) {
+        int left = 0;
+        int right = count - 1;
+        while (left <= right) {
+            int middle = (left + right)/2;
+            if (val < data[middle]) {
+                right = middle - 1;
+            } else if (val > data[middle]) {
+                left = middle + 1;
+            } else {
+                return true;
+            }
+        }
+        return false;
+    }
 
     public static void main(String[] args) {
-        PriorityQueue_ pq = new PriorityQueue_(30);
+        PriorityQueue_ pq = new PriorityQueue_(40);
         for (int i = 1; i <= 20; i++) {
             int val = (int) (Math.random()*99);
             pq.add(val);
             pq.print();
         }
-        pq.add(-1);
-        pq.add(-10);
-        pq.add(101);
-        pq.add(201);
+        pq.add(42);
+        pq.add(122);
+        pq.add(133);
+        pq.add(42);
         pq.print();
+        System.out.println(pq.contains(101)); // false
+        System.out.println(pq.contains(42)); // true
     }
 }
